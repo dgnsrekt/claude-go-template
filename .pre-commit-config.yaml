@@ -1,0 +1,74 @@
+# Pre-commit hooks for Go Template
+# See https://pre-commit.com for more information
+
+repos:
+  # General file checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ['--maxkb=1024']
+      - id: check-case-conflict
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+
+  # Go-specific hooks
+  - repo: https://github.com/dnephin/pre-commit-golang
+    rev: v0.5.1
+    hooks:
+      # Format Go code
+      - id: go-fmt
+      - id: go-imports
+      # Vet Go code
+      - id: go-vet-pkg
+      # Run tests
+      - id: go-unit-tests
+      # Check go mod
+      - id: go-mod-tidy
+      # Security check
+      - id: go-sec-pkg
+
+  # Additional Go linting
+  - repo: local
+    hooks:
+      # golangci-lint (more comprehensive than basic go vet)
+      - id: golangci-lint
+        name: golangci-lint
+        description: Run golangci-lint
+        entry: golangci-lint run --fix
+        language: system
+        files: \.go$
+        pass_filenames: false
+      
+      # Ensure go.sum is up to date
+      - id: go-mod-verify
+        name: go-mod-verify
+        description: Verify go.mod and go.sum are consistent
+        entry: go mod verify
+        language: system
+        files: go\.(mod|sum)$
+        pass_filenames: false
+      
+      # Check for TODO/FIXME comments in new code
+      - id: check-todos
+        name: check-todos
+        description: Check for TODO/FIXME comments
+        entry: bash -c 'if grep -rn "TODO\|FIXME\|XXX\|HACK" --include="*.go" .; then echo "Found TODO/FIXME comments. Please resolve before committing."; exit 1; fi'
+        language: system
+        files: \.go$
+        pass_filenames: false
+        
+      # Ensure test files exist for Go packages
+      - id: check-go-tests
+        name: check-go-tests
+        description: Ensure Go packages have test files
+        entry: bash -c 'for dir in $(find . -name "*.go" -not -name "*_test.go" -not -path "./vendor/*" -not -path "./.git/*" | xargs dirname | sort -u); do if [ ! -f "$dir"/*_test.go ] && [ -f "$dir"/*.go ]; then echo "Missing test file in $dir"; exit 1; fi; done'
+        language: system
+        files: \.go$
+        pass_filenames: false
