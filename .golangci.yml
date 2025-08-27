@@ -1,0 +1,154 @@
+# GolangCI-Lint configuration for Go Template
+# Professional linting configuration based on best practices
+
+run:
+  timeout: 5m
+  tests: true
+  skip-dirs:
+    - vendor
+    - testdata
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  exclude-use-default: false
+
+linters-settings:
+  # gci manages import grouping and ordering
+  gci:
+    sections:
+      - standard
+      - default
+      - prefix(github.com/myuser/myapp)
+    skip-generated: true
+    
+  # goconst finds repeated strings that could be constants
+  goconst:
+    min-len: 2
+    min-occurrences: 2
+    
+  # godot ensures comments end with periods
+  godot:
+    capital: true
+    
+  # goimports manages imports
+  goimports:
+    local-prefixes: github.com/myuser/myapp
+    
+  # misspell finds spelling mistakes
+  misspell:
+    locale: US
+    
+  # nestif reports deeply nested if statements
+  nestif:
+    min-complexity: 10
+    
+  # nolintlint ensures nolint directives are properly formatted
+  nolintlint:
+    require-explanation: true
+    require-specific: true
+    
+  # prealloc finds slice declarations with non-zero initial length
+  prealloc:
+    simple: true
+    range-loops: true
+    for-loops: false
+    
+  # revive is a fast, configurable, extensible linter
+  revive:
+    rules:
+      - name: unused-parameter
+        severity: warning
+      - name: var-naming
+        severity: warning
+      - name: package-comments
+        severity: warning
+      - name: exported
+        severity: warning
+        
+  # gofumpt is a stricter gofmt
+  gofumpt:
+    lang-version: "1.24"
+    extra-rules: true
+    
+  # gosec inspects source code for security problems
+  gosec:
+    excludes:
+      - G104 # Errors unhandled - we handle this with errcheck
+      
+  # cyclop calculates cyclomatic complexities
+  cyclop:
+    max-complexity: 15
+    
+  # funlen reports long functions
+  funlen:
+    lines: 100
+    statements: 50
+    
+  # lll reports long lines
+  lll:
+    line-length: 120
+
+linters:
+  enable:
+    # Core Go linters
+    - errcheck        # Check for unchecked errors
+    - gosimple        # Simplify code
+    - govet          # Go vet examiner
+    - ineffassign    # Detect ineffectual assignments
+    - staticcheck    # Go static analysis
+    - typecheck      # Type-check Go code
+    - unused         # Check for unused constants, variables, functions
+    
+    # Code quality linters
+    - bodyclose      # Check HTTP response body is closed
+    - goconst        # Find repeated strings that could be constants
+    - gofumpt        # Stricter gofmt
+    - goimports      # Manage imports
+    - misspell       # Find spelling mistakes
+    - prealloc       # Find slice declarations with non-zero initial length
+    - revive         # Fast, configurable, extensible linter
+    - unconvert      # Remove unnecessary type conversions
+    - unparam        # Report unused function parameters
+    - whitespace     # Check for unnecessary whitespace
+    
+    # Style linters
+    - gci            # Control golang import order and make it deterministic
+    - godot          # Check comments end with periods
+    - nolintlint     # Ill-formed or insufficient nolint directives
+    
+    # Complexity linters
+    - cyclop         # Check cyclomatic complexity
+    - funlen         # Check function length
+    - nestif         # Report deeply nested if statements
+    
+    # Bug detection linters
+    - gosec          # Inspect source code for security problems
+    - rowserrcheck   # Check whether Err of rows is checked successfully
+    - sqlclosecheck  # Check sql.Rows.Close is called
+    - nilerr         # Find the code that returns nil even if it checks that error is not nil
+    - noctx          # Find sending http request without context.Context
+    
+    # Performance linters
+    - gocritic       # Provide many diagnostics that check for bugs, performance and style issues
+    
+    # Additional useful linters
+    - asciicheck     # Simple linter to check that your code does not contain non-ASCII identifiers
+    - bidichk        # Check for dangerous unicode character sequences
+    - durationcheck  # Check for two durations multiplied together
+    - exhaustive     # Check exhaustiveness of enum switch statements
+    - exportloopref  # Check for pointers to enclosing loop variables
+    - forbidigo      # Forbid identifiers
+    - makezero       # Find slice declarations with non-zero initial length
+    - nakedret       # Find naked returns in functions greater than a specified function length
+    - nilnil         # Check that there is no simultaneous return of nil error and an invalid value
+    - thelper        # Detect golang test helpers without t.Helper() call
+    - tparallel      # Detect inappropriate usage of t.Parallel() method in your Go test codes
+    - wastedassign   # Find wasted assignment statements
+    
+  disable:
+    - lll            # Line length (we handle this in editors)
+    - gomnd          # Magic numbers (can be too strict for some cases)
+    - wrapcheck      # Check that errors from external packages are wrapped
+    - paralleltest   # Detect missing usage of t.Parallel() method (can be project-specific)
+    - testpackage    # Make sure that separate _test packages are used (not always needed)
