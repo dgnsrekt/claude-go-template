@@ -1,0 +1,33 @@
+{
+  "notifications": {
+    "enabled": false,
+    "ntfy_server": "",
+    "ntfy_topic": "go-dev",
+    "sound_enabled": true
+  },
+  "formatting": {
+    "auto_format": true,
+    "run_gofmt": true,
+    "run_goimports": true,
+    "run_go_vet": true
+  },
+  "quality": {
+    "block_skip_hooks": true,
+    "block_no_verify": true,
+    "protect_config_files": true
+  },
+  "logging": {
+    "enabled": true,
+    "log_dir": "~/.claude/logs",
+    "session_logs": true
+  },
+  "post_session": {
+    "run_tests": false,
+    "run_lint": false,
+    "check_build": false,
+    "cleanup_temp": true
+  },
+  "hooks": {
+    "stop-notify-active": true
+  }
+}
