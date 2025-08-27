@@ -28,7 +28,7 @@ func TestApp_Run(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			app := NewApp()
 			err := app.Run()
-			
+
 			if tt.wantErr {
 				assert.Error(t, err)
 			} else {

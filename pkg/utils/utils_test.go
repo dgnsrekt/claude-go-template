@@ -18,8 +18,9 @@ func TestFileExists(t *testing.T) {
 		{
 			name: "file exists",
 			setupFn: func(t *testing.T) string {
+				t.Helper()
 				tmpFile := filepath.Join(t.TempDir(), "test.txt")
-				err := os.WriteFile(tmpFile, []byte("test"), 0644)
+				err := os.WriteFile(tmpFile, []byte("test"), 0o600)
 				require.NoError(t, err)
 				return tmpFile
 			},
@@ -28,6 +29,7 @@ func TestFileExists(t *testing.T) {
 		{
 			name: "file does not exist",
 			setupFn: func(t *testing.T) string {
+				t.Helper()
 				return filepath.Join(t.TempDir(), "nonexistent.txt")
 			},
 			expected: false,

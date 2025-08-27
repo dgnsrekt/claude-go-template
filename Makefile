@@ -1,7 +1,7 @@
 # Go Project Template - Build Automation
 # Based on best practices from professional Go projects
 
-.PHONY: build test fmt lint clean install dev help tidy coverage bench
+.PHONY: build test fmt lint clean install dev help tidy coverage bench mod-tidy
 
 # Build configuration
 BINARY_NAME=PROJECT_NAME
@@ -47,8 +47,22 @@ fmt:
 		echo "Note: goimports not found. Install with: go install golang.org/x/tools/cmd/goimports@latest"; \
 	fi
 
+# Check if go.mod and go.sum are tidy
+mod-tidy:
+	@echo "Checking go.mod tidiness..."
+	@cp go.mod go.mod.bak
+	@cp go.sum go.sum.bak 2>/dev/null || touch go.sum.bak
+	@go mod tidy
+	@if ! diff -q go.mod go.mod.bak > /dev/null 2>&1 || ! diff -q go.sum go.sum.bak > /dev/null 2>&1; then \
+		echo "❌ go.mod or go.sum was not tidy. Please run 'go mod tidy'"; \
+		rm -f go.mod.bak go.sum.bak; \
+		exit 1; \
+	fi
+	@rm -f go.mod.bak go.sum.bak
+	@echo "✅ go.mod and go.sum are tidy"
+
 # Lint code
-lint:
+lint: mod-tidy
 	@echo "Running linter..."
 	@if command -v golangci-lint >/dev/null 2>&1; then \
 		golangci-lint run; \
@@ -91,8 +105,8 @@ verify:
 	@echo "Verifying dependencies..."
 	go mod verify
 
-# Run all checks (format, lint, test)
-check: fmt lint test
+# Run all checks (mod-tidy, format, lint, test)
+check: mod-tidy fmt lint test
 
 # Show project info
 info:
@@ -159,14 +173,15 @@ help:
 	@echo "  coverage      - Run tests with coverage report"
 	@echo "  bench         - Run benchmarks"
 	@echo "  fmt           - Format code with gofmt and goimports"
-	@echo "  lint          - Run golangci-lint"
+	@echo "  mod-tidy      - Check if go.mod and go.sum are tidy"
+	@echo "  lint          - Run golangci-lint (includes mod-tidy check)"
 	@echo "  clean         - Clean build artifacts"
 	@echo "  install       - Install binary to GOPATH/bin"
 	@echo "  tidy          - Update and verify dependencies"
 	@echo "  dev           - Build and run in development mode"
 	@echo "  deps          - Download dependencies"
 	@echo "  verify        - Verify dependencies"
-	@echo "  check         - Run format, lint, and test"
+	@echo "  check         - Run mod-tidy, format, lint, and test"
 	@echo "  setup         - Setup development environment"
 	@echo "  install-hooks - Install pre-commit hooks"
 	@echo "  uninstall-hooks - Uninstall pre-commit hooks"

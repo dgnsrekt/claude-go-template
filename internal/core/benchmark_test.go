@@ -1,3 +1,4 @@
+// Package core provides benchmarks for the core application functionality.
 package core
 
 import (
@@ -6,7 +7,7 @@ import (
 
 func BenchmarkApp_Run(b *testing.B) {
 	app := NewApp()
-	
+
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		err := app.Run()
@@ -18,7 +19,7 @@ func BenchmarkApp_Run(b *testing.B) {
 
 func BenchmarkApp_GetName(b *testing.B) {
 	app := NewApp()
-	
+
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = app.GetName()
