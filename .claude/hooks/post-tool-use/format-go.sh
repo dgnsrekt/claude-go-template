@@ -229,7 +229,6 @@ send_go_notification() {
         notification_message="Formatting completed with issues: $(basename "$file_path")"
         priority="default"
         tags="warning,go,format"
-        play_audio "gutter-trash.mp3"
     elif $formatted; then
         notification_message="Successfully formatted: $(basename "$file_path")"
         play_audio "toasty.mp3"
@@ -262,7 +261,6 @@ send_proto_notification() {
         notification_message="Formatting completed with issues: $(basename "$file_path")"
         priority="default"
         tags="warning,protobuf,format"
-        play_audio "gutter-trash.mp3"
     elif $formatted; then
         notification_message="Successfully formatted: $(basename "$file_path")"
         play_audio "toasty.mp3"

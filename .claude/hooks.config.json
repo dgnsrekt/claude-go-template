@@ -1,33 +1,45 @@
 {
   "notifications": {
     "enabled": false,
+    "sound_enabled": true,
     "ntfy_server": "",
-    "ntfy_topic": "go-dev",
-    "sound_enabled": true
+    "ntfy_topic": "claude-go-template"
   },
   "formatting": {
     "auto_format": true,
     "run_gofmt": true,
     "run_goimports": true,
-    "run_go_vet": true
+    "run_go_vet": true,
+    "run_buf_format": false,
+    "run_buf_lint": false
   },
   "quality": {
     "block_skip_hooks": true,
     "block_no_verify": true,
-    "protect_config_files": true
+    "protect_config_files": true,
+    "protected_files": [
+      ".golangci.yml"
+    ]
+  },
+  "post_session": {
+    "run_tests": false,
+    "run_lint": false,
+    "check_build": false,
+    "cleanup_temp": true,
+    "run_proto_generate": false
   },
   "logging": {
     "enabled": true,
     "log_dir": "~/.claude/logs",
     "session_logs": true
   },
-  "post_session": {
-    "run_tests": false,
-    "run_lint": false,
-    "check_build": false,
-    "cleanup_temp": true
-  },
   "hooks": {
     "stop-notify-active": true
+  },
+  "project": {
+    "type": "go",
+    "name": "claude-go-template",
+    "protobuf_enabled": false,
+    "buf_enabled": false
   }
 }

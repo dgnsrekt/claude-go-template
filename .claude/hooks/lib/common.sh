@@ -190,10 +190,15 @@ send_notification() {
 block_command() {
     local message="$1"
     local details="${2:-Command blocked by quality controls}"
+    local command="${3:-}"
 
     # Send security alert
     send_notification "$details" "🚫 Command Blocked" "high" "warning,block,security"
-    play_audio "gutter-trash.mp3"
+
+    # Only play gutter-trash.mp3 for specific bypass attempts (--no-verify, -n, or SKIP=)
+    if [[ "$command" == *"--no-verify"* ]] || [[ "$command" == *" -n"* ]] || [[ "$command" == *"SKIP="* ]]; then
+        play_audio "gutter-trash.mp3"
+    fi
 
     # Output block decision in JSON format
     jq -n --arg msg "$message" '{"decision": "block", "message": $msg}'

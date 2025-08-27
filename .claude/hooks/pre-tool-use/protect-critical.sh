@@ -42,7 +42,8 @@ Instead of skipping, fix the real issues:
 5. 🛠 Generate protobuf code if needed (run: make proto)
 
 Quality standards exist to maintain excellent Go code." \
-            "Attempted to use SKIP= to bypass pre-commit hooks"
+            "Attempted to use SKIP= to bypass pre-commit hooks" \
+            "$command"
         return
     fi
 
@@ -67,7 +68,8 @@ Instead of using $bypass_flag, fix the real issues:
 5. 🛠 Generate protobuf code if needed (run: make proto)
 
 Git hooks ensure Go and Protobuf code quality." \
-                "Attempted to use $bypass_flag flag to bypass git hooks"
+                "Attempted to use $bypass_flag flag to bypass git hooks" \
+                "$command"
             return
         fi
     fi

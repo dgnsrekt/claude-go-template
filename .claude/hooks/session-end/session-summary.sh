@@ -282,7 +282,7 @@ Report: $(basename "$report_file")"
     if [[ ${checks_failed:-0} -eq 0 ]]; then
         play_audio "toasty.mp3"
     else
-        play_audio "gutter-trash.mp3"
+        log_info "Session completed with some issues - see report for details"
     fi
 
     # Update session statistics

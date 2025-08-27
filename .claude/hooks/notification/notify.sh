@@ -128,8 +128,11 @@ Session: $session_id" \
         "high" \
         "key,permission,urgent"
 
-    # Play attention sound
-    play_audio "gutter-trash.mp3"
+    # Play attention sound only if it's a bypass-related permission request
+    local message_lower=$(echo "$message" | tr '[:upper:]' '[:lower:]')
+    if [[ "$message_lower" =~ bypass|skip|no-verify|override ]]; then
+        play_audio "gutter-trash.mp3"
+    fi
 
     # Log to special permission log
     {
@@ -161,8 +164,11 @@ Session: $session_id" \
         "high" \
         "red_circle,error,alert"
 
-    # Play error sound
-    play_audio "gutter-trash.mp3"
+    # Play error sound only for security/bypass related errors
+    local message_lower=$(echo "$message" | tr '[:upper:]' '[:lower:]')
+    if [[ "$message_lower" =~ bypass|skip|no-verify|security|blocked|denied ]]; then
+        play_audio "gutter-trash.mp3"
+    fi
 
     # Log to error log
     {
@@ -222,10 +228,13 @@ main() {
     # Send standard notification
     send_notification "$formatted_message" "$title" "$priority" "$tags"
 
-    # Play appropriate audio based on priority
+    # Play appropriate audio based on priority and message content
     case "$priority" in
         "high")
-            play_audio "gutter-trash.mp3"
+            # Only play gutter-trash for bypass/security related high priority notifications
+            if [[ "$message_lower" =~ bypass|skip|no-verify|security|blocked|denied ]]; then
+                play_audio "gutter-trash.mp3"
+            fi
             ;;
         "default")
             # Only play sound for certain types to avoid spam
