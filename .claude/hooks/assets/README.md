@@ -11,7 +11,7 @@ The hooks use audio notifications to provide audible feedback for different even
   - Used for: Session completion, successful formatting, tests passing
   - Context: Positive feedback for successful operations
 
-### Warning/Error Sounds  
+### Warning/Error Sounds
 - **gutter-trash.mp3** - Plays for warnings, errors, and blocked actions
   - Used for: Security violations, blocked commands, errors, permission requests
   - Context: Attention-grabbing sound for issues requiring user attention

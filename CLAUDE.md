@@ -11,7 +11,7 @@ This file configures Claude Code to work with this Go project template. It provi
 
 This is a Go project template built with modern development practices:
 - **Language**: Go 1.24
-- **Build Tool**: Make with comprehensive targets  
+- **Build Tool**: Make with comprehensive targets
 - **Formatter**: gofmt + goimports
 - **Linter**: golangci-lint with extensive rule set
 - **Test Runner**: go test with testify assertions
@@ -182,7 +182,7 @@ func TestFunctionName(t *testing.T) {
     for _, tt := range tests {
         t.Run(tt.name, func(t *testing.T) {
             result, err := FunctionUnderTest(tt.input)
-            
+
             if tt.wantErr {
                 assert.Error(t, err)
             } else {
@@ -242,10 +242,10 @@ func TestFileOperation(t *testing.T) {
     // Arrange
     tmpDir := t.TempDir()
     testFile := filepath.Join(tmpDir, "test.txt")
-    
+
     // Act
     err := CreateFile(testFile, "content")
-    
+
     // Assert
     require.NoError(t, err)
     assert.FileExists(t, testFile)
@@ -324,7 +324,7 @@ This template includes a comprehensive Claude Code hooks system that provides au
 ├── hooks/
 │   ├── pre-tool-use/          # Validation and blocking hooks
 │   │   └── protect-critical.sh   # Blocks quality bypass attempts
-│   ├── post-tool-use/         # Formatting and cleanup hooks  
+│   ├── post-tool-use/         # Formatting and cleanup hooks
 │   │   └── format-go.sh          # Auto-formats Go files
 │   ├── user-prompt-submit/    # Logging and analysis hooks
 │   │   └── log-prompts.sh        # Logs user interactions
@@ -351,10 +351,10 @@ This template includes a comprehensive Claude Code hooks system that provides au
 - **Dangerous command protection**: Blocks risky Git/Go operations
 - **Test reminders**: Suggests adding tests for new Go files
 
-#### 🎨 **Auto-Formatting** (PostToolUse)  
+#### 🎨 **Auto-Formatting** (PostToolUse)
 - **gofmt formatting**: Automatic Go code formatting
 - **Import organization**: `goimports` for clean imports
-- **Code validation**: `go vet` for correctness checks  
+- **Code validation**: `go vet` for correctness checks
 - **Compilation verification**: Ensures code compiles
 - **Optional test execution**: Runs tests after changes
 
@@ -425,7 +425,7 @@ Configure hooks via `.claude/hooks.config.json`:
 ### Hook Logs
 
 All hook activity is logged to `~/.claude/logs/`:
-- **hooks.log** - General hook activity  
+- **hooks.log** - General hook activity
 - **session-{id}.log** - Individual session logs
 - **prompts-{id}.log** - User prompt history
 - **notifications.log** - Notification history
@@ -455,7 +455,7 @@ The `.pre-commit-config.yaml` configures hooks that run before each commit:
 - merge conflict detection
 - large file checks
 
-# Go-specific hooks  
+# Go-specific hooks
 - go-fmt (code formatting)
 - go-imports (import organization)
 - go-vet-pkg (static analysis)
@@ -528,6 +528,6 @@ The hooks system will:
 - ✅ Log all development activity for analysis
 
 Do what has been asked; nothing more, nothing less.
-NEVER create files unless they're absolutely necessary for achieving your goal.  
+NEVER create files unless they're absolutely necessary for achieving your goal.
 ALWAYS prefer editing an existing file to creating a new one.
 NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.

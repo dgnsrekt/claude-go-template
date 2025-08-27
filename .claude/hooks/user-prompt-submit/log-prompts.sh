@@ -16,10 +16,10 @@ analyze_prompt() {
     local activity_type="general"
     local priority="default"
     local tags="prompt,log"
-    
+
     # Analyze prompt content to categorize activity
     local prompt_lower=$(echo "$prompt" | tr '[:upper:]' '[:lower:]')
-    
+
     if [[ "$prompt_lower" =~ (test|testing|spec|bench) ]]; then
         activity_type="testing"
         tags="test,development"
@@ -48,7 +48,7 @@ analyze_prompt() {
         activity_type="review"
         tags="review,analysis"
     fi
-    
+
     echo "$activity_type:$priority:$tags"
 }
 
@@ -56,29 +56,29 @@ main() {
     # Read hook input from stdin
     local hook_input
     hook_input=$(cat)
-    
+
     # Parse JSON input
     local session_id cwd prompt
     session_id=$(echo "$hook_input" | jq -r '.session_id // "unknown"' 2>/dev/null || echo "unknown")
     cwd=$(echo "$hook_input" | jq -r '.cwd // "."' 2>/dev/null || echo ".")
     prompt=$(echo "$hook_input" | jq -r '.prompt // ""' 2>/dev/null || echo "")
-    
+
     # Get timestamp
     local timestamp=$(date -Iseconds)
-    
+
     log_info "Processing user prompt submission for session $session_id"
-    
+
     # Start session log if it doesn't exist
     if [[ -z "${SESSION_LOG:-}" ]]; then
         start_session_log "$session_id"
     fi
-    
+
     # Analyze the prompt
     local analysis_result=$(analyze_prompt "$prompt")
     local activity_type=$(echo "$analysis_result" | cut -d: -f1)
     local priority=$(echo "$analysis_result" | cut -d: -f2)
     local tags=$(echo "$analysis_result" | cut -d: -f3)
-    
+
     # Log prompt details
     {
         echo "--- User Prompt [$timestamp] ---"
@@ -90,7 +90,7 @@ main() {
         echo "Prompt Preview: $(echo "$prompt" | head -c 200)..."
         echo ""
     } >> "${SESSION_LOG:-$HOOK_LOG_DIR/session-$session_id.log}"
-    
+
     # Create detailed prompt log
     local prompt_log="$HOOK_LOG_DIR/prompts-$session_id.log"
     {
@@ -107,34 +107,34 @@ main() {
         echo "=========================="
         echo ""
     } >> "$prompt_log"
-    
+
     # Check project context and warn about issues
     local context_warnings=()
-    
+
     # Check if we're in the right directory
     if [[ ! -f "$cwd/go.mod" ]] && [[ "$PROJECT_TYPE" == "Go" ]]; then
         context_warnings+=("⚠️ Expected Go project but go.mod not found")
     fi
-    
+
     # Check git status for uncommitted changes
     if [[ "$GIT_STATUS" == "modified" ]]; then
         context_warnings+=("⚠️ Uncommitted changes detected")
     fi
-    
+
     # Check if dependencies might be needed
     if [[ "$prompt" =~ (install|dependency|package) ]]; then
         if ! check_tool "go"; then
             context_warnings+=("⚠️ Go not available for dependency management")
         fi
     fi
-    
+
     # Log context warnings
     if [[ ${#context_warnings[@]} -gt 0 ]]; then
         log_warn "Context warnings for this prompt:"
         for warning in "${context_warnings[@]}"; do
             log_warn "  $warning"
         done
-        
+
         # Add to session log
         {
             echo "Context Warnings:"
@@ -142,11 +142,11 @@ main() {
             echo ""
         } >> "${SESSION_LOG:-$HOOK_LOG_DIR/session-$session_id.log}"
     fi
-    
+
     # Send notification for high-priority activities
     if [[ "$priority" == "high" ]] || [[ "$activity_type" == "deployment" ]]; then
         send_notification "High-priority activity detected: $activity_type
-        
+
 Project: $PROJECT_NAME
 Session: $session_id
 Prompt preview: $(echo "$prompt" | head -c 100)..." \
@@ -154,13 +154,13 @@ Prompt preview: $(echo "$prompt" | head -c 100)..." \
             "high" \
             "warning,$tags"
     fi
-    
+
     # Track activity statistics
     local stats_file="$HOOK_LOG_DIR/session-stats.json"
     if [[ ! -f "$stats_file" ]]; then
         echo '{}' > "$stats_file"
     fi
-    
+
     # Update activity counters using jq
     if command -v jq >/dev/null 2>&1; then
         local temp_file=$(mktemp)
@@ -176,10 +176,10 @@ Prompt preview: $(echo "$prompt" | head -c 100)..." \
            ' "$stats_file" > "$temp_file"
         mv "$temp_file" "$stats_file"
     fi
-    
+
     # Log successful processing
     log_success "Logged prompt: $activity_type activity (${#prompt} chars)"
-    
+
     # Send notification for session tracking
     send_notification "User prompt logged: $activity_type activity" \
         "PROJECT_NAME: Session Activity" \

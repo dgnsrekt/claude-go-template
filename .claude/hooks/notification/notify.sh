@@ -17,9 +17,9 @@ analyze_notification() {
     local priority="default"
     local tags="bell,info,go"
     local title="PROJECT_NAME: Notification"
-    
+
     local message_lower=$(echo "$message" | tr '[:upper:]' '[:lower:]')
-    
+
     # High priority notifications
     if [[ "$message_lower" =~ permission|approval|authorize ]]; then
         priority="high"
@@ -33,8 +33,8 @@ analyze_notification() {
         priority="default"
         tags="stop_sign,blocked,security"
         title="PROJECT_NAME: Action Blocked"
-    
-    # Medium priority notifications  
+
+    # Medium priority notifications
     elif [[ "$message_lower" =~ waiting|idle|pause ]]; then
         priority="low"
         tags="clock,waiting,idle"
@@ -47,7 +47,7 @@ analyze_notification() {
         priority="default"
         tags="white_check_mark,success,complete"
         title="PROJECT_NAME: Task Completed"
-    
+
     # Development specific
     elif [[ "$message_lower" =~ test|testing|spec ]]; then
         priority="default"
@@ -66,12 +66,12 @@ analyze_notification() {
         tags="package,git,version"
         title="PROJECT_NAME: Version Control"
     fi
-    
+
     # Add hook event context to tags if available
     if [[ -n "$hook_event_name" ]]; then
         tags="$tags,$(echo "$hook_event_name" | tr '[:upper:]' '[:lower:]')"
     fi
-    
+
     echo "$priority:$title:$tags"
 }
 
@@ -79,42 +79,42 @@ format_notification_message() {
     local original_message="$1"
     local hook_event_name="${2:-}"
     local session_id="${3:-unknown}"
-    
+
     # Add context information
     local context_info=""
-    
+
     # Add event context if available
     if [[ -n "$hook_event_name" ]]; then
         context_info+="\n**Event**: $hook_event_name"
     fi
-    
+
     # Add project context
     context_info+="\n**Project**: $PROJECT_NAME ($PROJECT_TYPE)"
-    
+
     # Add git status if relevant
     if [[ "$GIT_STATUS" != "unknown" ]] && [[ "$GIT_STATUS" != "clean" ]]; then
         context_info+="\n**Git Status**: $GIT_STATUS"
     fi
-    
+
     # Add session info if available
     if [[ "$session_id" != "unknown" ]]; then
         context_info+="\n**Session**: $session_id"
     fi
-    
+
     # Format the complete message
     local formatted_message="**Message**: $original_message$context_info
 
 *Timestamp*: $(date '+%Y-%m-%d %H:%M:%S')"
-    
+
     echo "$formatted_message"
 }
 
 handle_permission_request() {
     local message="$1"
     local session_id="$2"
-    
+
     log_warn "Permission request detected: $message"
-    
+
     # Send high-priority notification for permission requests
     send_notification "PERMISSION REQUIRED
 
@@ -127,10 +127,10 @@ Session: $session_id" \
         "🔑 PROJECT_NAME: Permission Required" \
         "high" \
         "key,permission,urgent"
-    
+
     # Play attention sound
     play_audio "gutter-trash.mp3"
-    
+
     # Log to special permission log
     {
         echo "=== PERMISSION REQUEST [$(\date -Iseconds)] ==="
@@ -145,9 +145,9 @@ Session: $session_id" \
 handle_error_notification() {
     local message="$1"
     local session_id="$2"
-    
+
     log_error "Error notification: $message"
-    
+
     # Send error notification
     send_notification "ERROR DETECTED
 
@@ -160,10 +160,10 @@ Session: $session_id" \
         "🚨 PROJECT_NAME: Error Detected" \
         "high" \
         "red_circle,error,alert"
-    
+
     # Play error sound
     play_audio "gutter-trash.mp3"
-    
+
     # Log to error log
     {
         echo "=== ERROR NOTIFICATION [$(\date -Iseconds)] ==="
@@ -179,38 +179,38 @@ main() {
     # Read hook input from stdin
     local hook_input
     hook_input=$(cat)
-    
+
     # Parse JSON input
     local session_id cwd message hook_event_name
     session_id=$(echo "$hook_input" | jq -r '.session_id // "unknown"' 2>/dev/null || echo "unknown")
     cwd=$(echo "$hook_input" | jq -r '.cwd // "."' 2>/dev/null || echo ".")
     message=$(echo "$hook_input" | jq -r '.message // ""' 2>/dev/null || echo "")
     hook_event_name=$(echo "$hook_input" | jq -r '.hook_event_name // ""' 2>/dev/null || echo "")
-    
+
     log_info "Processing notification hook for session $session_id"
     log_info "Event: $hook_event_name"
     log_info "Message preview: $(echo "$message" | head -c 100)..."
-    
+
     # Handle empty messages
     if [[ -z "$message" ]]; then
         log_warn "Empty notification message received"
         exit 0
     fi
-    
+
     # Analyze notification characteristics
     local analysis_result
     analysis_result=$(analyze_notification "$message" "$hook_event_name")
     local priority=$(echo "$analysis_result" | cut -d: -f1)
     local title=$(echo "$analysis_result" | cut -d: -f2)
     local tags=$(echo "$analysis_result" | cut -d: -f3)
-    
+
     # Format the notification message with context
     local formatted_message
     formatted_message=$(format_notification_message "$message" "$hook_event_name" "$session_id")
-    
+
     # Handle special notification types
     local message_lower=$(echo "$message" | tr '[:upper:]' '[:lower:]')
-    
+
     if [[ "$message_lower" =~ permission|approval|authorize ]]; then
         handle_permission_request "$message" "$session_id"
         return
@@ -218,10 +218,10 @@ main() {
         handle_error_notification "$message" "$session_id"
         return
     fi
-    
+
     # Send standard notification
     send_notification "$formatted_message" "$title" "$priority" "$tags"
-    
+
     # Play appropriate audio based on priority
     case "$priority" in
         "high")
@@ -237,7 +237,7 @@ main() {
             # No sound for low priority
             ;;
     esac
-    
+
     # Log to session log if available
     if [[ -n "${SESSION_LOG:-}" ]] && [[ -f "${SESSION_LOG}" ]]; then
         {
@@ -248,7 +248,7 @@ main() {
             echo ""
         } >> "${SESSION_LOG}"
     fi
-    
+
     # Update notification statistics
     local stats_file="$HOOK_LOG_DIR/session-stats.json"
     if [[ -f "$stats_file" ]] && command -v jq >/dev/null 2>&1; then
@@ -265,7 +265,7 @@ main() {
            ' "$stats_file" > "$temp_file"
         mv "$temp_file" "$stats_file"
     fi
-    
+
     log_success "Notification processed: $title"
 }
 

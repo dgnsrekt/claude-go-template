@@ -28,24 +28,24 @@ fi
 
 main() {
     log_info "Claude Code session stopping..."
-    
+
     # Read hook input if available
     local hook_input=""
     if [[ ! -t 0 ]]; then  # Check if stdin is available
         hook_input=$(timeout 1 cat 2>/dev/null || true)
     fi
-    
+
     # Parse session information if available
     local session_id="unknown"
     local transcript_path=""
-    
+
     if [[ -n "$hook_input" ]] && command -v jq >/dev/null 2>&1; then
         session_id=$(echo "$hook_input" | jq -r '.session_id // "unknown"' 2>/dev/null || echo "unknown")
         transcript_path=$(echo "$hook_input" | jq -r '.transcript_path // ""' 2>/dev/null || echo "")
     fi
-    
+
     log_info "Session ID: $session_id"
-    
+
     # 1. Play completion sound (enabled by default)
     if command -v is_enabled >/dev/null 2>&1 && is_enabled "notifications.sound_enabled"; then
         if command -v play_audio >/dev/null 2>&1; then
@@ -63,22 +63,22 @@ main() {
             fi
         fi
     fi
-    
+
     # 2. Log session completion
     local completion_log="$HOME/.claude/completion.log"
     mkdir -p "$(dirname "$completion_log")"
     echo "[$(date -Iseconds)] Claude Code session completed - Session: $session_id, Project: ${PROJECT_NAME:-$(basename "$(pwd)")}" >> "$completion_log"
-    
+
     # 3. Analyze session transcript if available
     if [[ -f "$transcript_path" ]]; then
         log_info "Analyzing session transcript..."
-        
+
         local word_count line_count
         word_count=$(wc -w < "$transcript_path" 2>/dev/null || echo "0")
         line_count=$(wc -l < "$transcript_path" 2>/dev/null || echo "0")
-        
+
         log_info "Session transcript: $line_count lines, $word_count words"
-        
+
         # Detect session activity types
         local activities=()
         if grep -q -i "test\|spec\|bench" "$transcript_path" 2>/dev/null; then
@@ -93,19 +93,19 @@ main() {
         if grep -q -i "build\|compile" "$transcript_path" 2>/dev/null; then
             activities+=("build")
         fi
-        
+
         if [[ ${#activities[@]} -gt 0 ]]; then
             log_info "Detected activities: $(IFS=', '; echo "${activities[*]}")"
         fi
     fi
-    
+
     # 4. Run optional post-session checks (enabled by default)
     local project_dir="$(pwd)"
-    
+
     # Check if this is a Go project
     if [[ -f "$project_dir/go.mod" ]]; then
         log_info "Go project detected, running post-session checks..."
-        
+
         # Format check
         if command -v gofmt >/dev/null 2>&1; then
             local unformatted_files
@@ -116,7 +116,7 @@ main() {
                 log_success "All Go files properly formatted"
             fi
         fi
-        
+
         # Test execution (optional, enabled by configuration)
         if [[ -f "$project_dir/Makefile" ]]; then
             if command -v is_enabled >/dev/null 2>&1 && is_enabled "post_session.run_tests"; then
@@ -127,8 +127,8 @@ main() {
                     log_warn "Some tests failed or timed out"
                 fi
             fi
-            
-            # Linting check (optional, enabled by configuration)  
+
+            # Linting check (optional, enabled by configuration)
             if command -v is_enabled >/dev/null 2>&1 && is_enabled "post_session.run_lint"; then
                 if command -v golangci-lint >/dev/null 2>&1 && [[ -f "$project_dir/.golangci.yml" ]]; then
                     log_info "Running linter check..."
@@ -139,7 +139,7 @@ main() {
                     fi
                 fi
             fi
-            
+
             # Build check
             if command -v is_enabled >/dev/null 2>&1 && is_enabled "post_session.check_build"; then
                 log_info "Checking build..."
@@ -151,14 +151,14 @@ main() {
             fi
         fi
     fi
-    
+
     # 5. Send session completion notification
     if command -v send_notification >/dev/null 2>&1; then
         local activities_text=""
         if [[ -n "${activities:-}" ]]; then
             activities_text=" ($(IFS=', '; echo "${activities[*]}"))"
         fi
-        
+
         send_notification "Claude Code session completed for ${PROJECT_NAME:-$(basename "$project_dir")}$activities_text
 
 Session: $session_id
@@ -167,14 +167,14 @@ Duration: $(if [[ -f "$transcript_path" ]]; then echo "$line_count interactions"
             "default" \
             "white_check_mark,session,complete"
     fi
-    
+
     # 6. Cleanup temporary files (optional)
     if command -v is_enabled >/dev/null 2>&1 && is_enabled "post_session.cleanup_temp"; then
         log_info "Cleaning up temporary files..."
         find "$project_dir" -name "*.tmp" -type f -delete 2>/dev/null || true
         find "$project_dir" -name ".DS_Store" -type f -delete 2>/dev/null || true
     fi
-    
+
     log_success "Claude Code session stop hook completed"
 }
 

@@ -25,8 +25,6 @@ repos:
       # Format Go code
       - id: go-fmt
       - id: go-imports
-      # Vet Go code (disabled due to configuration issues)
-      # - id: go-vet
       # Run tests
       - id: go-unit-tests
       # Check go mod

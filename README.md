@@ -63,7 +63,7 @@ make check
    ```bash
    # Replace module name in go.mod
    go mod edit -module github.com/yourusername/yourproject
-   
+
    # Update import paths throughout the codebase
    find . -name "*.go" -type f -exec sed -i 's|github.com/myuser/myapp|github.com/yourusername/yourproject|g' {} \;
    ```
@@ -217,7 +217,7 @@ func TestExample(t *testing.T) {
     for _, tt := range tests {
         t.Run(tt.name, func(t *testing.T) {
             result, err := FunctionUnderTest(tt.input)
-            
+
             if tt.wantErr {
                 assert.Error(t, err)
             } else {
@@ -233,14 +233,14 @@ func TestExample(t *testing.T) {
 ```go
 func TestWithHelper(t *testing.T) {
     helper := NewTestHelper(t)
-    
+
     // Create test files
     path := helper.CreateFile("test.txt", "content")
-    
+
     // Assert file operations
     helper.AssertFileExists("test.txt")
     content := helper.ReadFile("test.txt")
-    
+
     assert.Equal(t, "content", content)
 }
 ```
