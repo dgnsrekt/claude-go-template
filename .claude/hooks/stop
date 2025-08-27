@@ -163,7 +163,7 @@ main() {
 
 Session: $session_id
 Duration: $(if [[ -f "$transcript_path" ]]; then echo "$line_count interactions"; else echo "unknown"; fi)" \
-            "Go Template: Session Complete" \
+            "PROJECT_NAME: Session Complete" \
             "default" \
             "white_check_mark,session,complete"
     fi

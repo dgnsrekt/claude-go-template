@@ -1,4 +1,4 @@
-module github.com/myuser/myapp
+module github.com/YOUR_USERNAME/PROJECT_NAME
 
 go 1.24
 

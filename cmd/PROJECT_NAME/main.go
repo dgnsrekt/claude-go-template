@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/myuser/myapp/internal/core"
+	"github.com/YOUR_USERNAME/PROJECT_NAME/internal/core"
 )
 
 const version = "0.1.0"

@@ -4,7 +4,7 @@
 .PHONY: build test fmt lint clean install dev help tidy coverage bench
 
 # Build configuration
-BINARY_NAME=myapp
+BINARY_NAME=PROJECT_NAME
 BUILD_DIR=bin
 GO_VERSION=$(shell go version | awk '{print $$3}')
 GIT_COMMIT=$(shell git rev-parse --short HEAD 2>/dev/null || echo "unknown")
@@ -18,7 +18,7 @@ LDFLAGS=-ldflags "-X main.version=$(VERSION) -X main.commit=$(GIT_COMMIT) -X mai
 build:
 	@echo "Building $(BINARY_NAME)..."
 	@mkdir -p $(BUILD_DIR)
-	go build $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME) ./cmd/myapp
+	go build $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME) ./cmd/PROJECT_NAME
 
 # Run tests
 test:
@@ -68,7 +68,7 @@ clean:
 # Install binary to GOPATH/bin
 install:
 	@echo "Installing $(BINARY_NAME)..."
-	go install $(LDFLAGS) ./cmd/myapp
+	go install $(LDFLAGS) ./cmd/PROJECT_NAME
 
 # Update dependencies
 tidy:

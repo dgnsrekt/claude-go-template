@@ -135,7 +135,7 @@ Use proper Go module commands instead." \
         
         if command_contains "$command" "$pattern"; then
             log_warn "$message"
-            send_notification "$message" "Go Template: Warning" "default" "warning,go"
+            send_notification "$message" "PROJECT_NAME: Warning" "default" "warning,go"
         fi
     done
     
@@ -149,7 +149,7 @@ Use proper Go module commands instead." \
             if [[ ! -f "$test_file" ]]; then
                 log_warn "Go file modified without corresponding test: $file_path"
                 send_notification "Consider adding tests for: $(basename "$file_path")" \
-                    "Go Template: Test Reminder" "low" "test,go"
+                    "PROJECT_NAME: Test Reminder" "low" "test,go"
             fi
         fi
     fi

@@ -150,7 +150,7 @@ main() {
 Project: $PROJECT_NAME
 Session: $session_id
 Prompt preview: $(echo "$prompt" | head -c 100)..." \
-            "Go Template: High Priority Activity" \
+            "PROJECT_NAME: High Priority Activity" \
             "high" \
             "warning,$tags"
     fi
@@ -182,7 +182,7 @@ Prompt preview: $(echo "$prompt" | head -c 100)..." \
     
     # Send notification for session tracking
     send_notification "User prompt logged: $activity_type activity" \
-        "Go Template: Session Activity" \
+        "PROJECT_NAME: Session Activity" \
         "low" \
         "log,$tags"
 }

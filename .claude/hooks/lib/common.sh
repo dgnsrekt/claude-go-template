@@ -147,7 +147,7 @@ play_audio() {
 # Send notification
 send_notification() {
     local message="$1"
-    local title="${2:-Go Template}"
+    local title="${2:-PROJECT_NAME}"
     local priority="${3:-default}"
     local tags="${4:-gear,go}"
     

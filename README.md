@@ -1,12 +1,12 @@
 # Go Project Template
 
-[![CI Status](https://github.com/myuser/myapp/workflows/CI/badge.svg)](https://github.com/myuser/myapp/actions)
-[![Go Report Card](https://goreportcard.com/badge/github.com/myuser/myapp)](https://goreportcard.com/report/github.com/myuser/myapp)
-[![codecov](https://codecov.io/gh/myuser/myapp/branch/main/graph/badge.svg)](https://codecov.io/gh/myuser/myapp)
+[![CI Status](https://github.com/YOUR_USERNAME/PROJECT_NAME/workflows/CI/badge.svg)](https://github.com/YOUR_USERNAME/PROJECT_NAME/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/YOUR_USERNAME/PROJECT_NAME)](https://goreportcard.com/report/github.com/YOUR_USERNAME/PROJECT_NAME)
+[![codecov](https://codecov.io/gh/YOUR_USERNAME/PROJECT_NAME/branch/main/graph/badge.svg)](https://codecov.io/gh/YOUR_USERNAME/PROJECT_NAME)
 [![Go Version](https://img.shields.io/badge/go-1.24+-blue.svg)](https://golang.org/dl/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A professional Go project template with modern development practices, comprehensive testing, and Claude Code integration.
+PROJECT_DESCRIPTION
 
 ## Features
 
@@ -37,8 +37,8 @@ A professional Go project template with modern development practices, comprehens
 
 ```bash
 # Clone this template
-git clone https://github.com/myuser/myapp.git
-cd myapp
+git clone https://github.com/YOUR_USERNAME/PROJECT_NAME.git
+cd PROJECT_NAME
 
 # Set up development environment (installs tools, dependencies, and pre-commit)
 make setup

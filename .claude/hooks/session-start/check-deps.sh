@@ -214,7 +214,7 @@ main() {
     } >> "${SESSION_LOG:-$HOOK_LOG_DIR/session-$session_id.log}"
     
     # Send session start notification
-    local notification_title="Go Template: Session Started"
+    local notification_title="PROJECT_NAME: Session Started"
     local notification_message="Development session started for $PROJECT_NAME
     
 Environment:
@@ -229,7 +229,7 @@ Environment:
     if [[ $total_issues -gt 5 ]]; then
         priority="default"
         tags="warning,session,start"
-        notification_title="Go Template: Session Started (Issues Detected)"
+        notification_title="PROJECT_NAME: Session Started (Issues Detected)"
     fi
     
     send_notification "$notification_message" "$notification_title" "$priority" "$tags"

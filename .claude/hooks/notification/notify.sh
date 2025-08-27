@@ -16,7 +16,7 @@ analyze_notification() {
     local hook_event_name="${2:-}"
     local priority="default"
     local tags="bell,info,go"
-    local title="Go Template: Notification"
+    local title="PROJECT_NAME: Notification"
     
     local message_lower=$(echo "$message" | tr '[:upper:]' '[:lower:]')
     
@@ -24,47 +24,47 @@ analyze_notification() {
     if [[ "$message_lower" =~ permission|approval|authorize ]]; then
         priority="high"
         tags="warning,key,permission"
-        title="Go Template: Permission Required"
+        title="PROJECT_NAME: Permission Required"
     elif [[ "$message_lower" =~ error|failed|failure|critical ]]; then
         priority="high"
         tags="red_circle,error,alert"
-        title="Go Template: Error Detected"
+        title="PROJECT_NAME: Error Detected"
     elif [[ "$message_lower" =~ blocked|denied|rejected ]]; then
         priority="default"
         tags="stop_sign,blocked,security"
-        title="Go Template: Action Blocked"
+        title="PROJECT_NAME: Action Blocked"
     
     # Medium priority notifications  
     elif [[ "$message_lower" =~ waiting|idle|pause ]]; then
         priority="low"
         tags="clock,waiting,idle"
-        title="Go Template: Waiting for Input"
+        title="PROJECT_NAME: Waiting for Input"
     elif [[ "$message_lower" =~ warning|caution|attention ]]; then
         priority="default"
         tags="warning,caution"
-        title="Go Template: Warning"
+        title="PROJECT_NAME: Warning"
     elif [[ "$message_lower" =~ completed|finished|done|success ]]; then
         priority="default"
         tags="white_check_mark,success,complete"
-        title="Go Template: Task Completed"
+        title="PROJECT_NAME: Task Completed"
     
     # Development specific
     elif [[ "$message_lower" =~ test|testing|spec ]]; then
         priority="default"
         tags="test_tube,test,go"
-        title="Go Template: Testing Activity"
+        title="PROJECT_NAME: Testing Activity"
     elif [[ "$message_lower" =~ build|compile|format ]]; then
         priority="default"
         tags="gear,build,go"
-        title="Go Template: Build Activity"
+        title="PROJECT_NAME: Build Activity"
     elif [[ "$message_lower" =~ lint|quality|standard ]]; then
         priority="default"
         tags="memo,quality,lint"
-        title="Go Template: Code Quality"
+        title="PROJECT_NAME: Code Quality"
     elif [[ "$message_lower" =~ commit|git|version ]]; then
         priority="default"
         tags="package,git,version"
-        title="Go Template: Version Control"
+        title="PROJECT_NAME: Version Control"
     fi
     
     # Add hook event context to tags if available
@@ -124,7 +124,7 @@ Please review and authorize the pending action.
 
 Project: $PROJECT_NAME
 Session: $session_id" \
-        "🔑 Go Template: Permission Required" \
+        "🔑 PROJECT_NAME: Permission Required" \
         "high" \
         "key,permission,urgent"
     
@@ -157,7 +157,7 @@ Please check the development session for issues.
 
 Project: $PROJECT_NAME
 Session: $session_id" \
-        "🚨 Go Template: Error Detected" \
+        "🚨 PROJECT_NAME: Error Detected" \
         "high" \
         "red_circle,error,alert"
     
