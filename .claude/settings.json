@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/pre-tool-use/protect-critical.sh",
+            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/block-skip-hooks.py",
             "timeout": 10
           }
         ]
@@ -18,7 +18,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/post-tool-use/format-go.sh",
+            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/format-go-hook.py",
             "timeout": 30
           }
         ]
@@ -28,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/post-tool-use/format-go.sh",
+            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/format-go-hook.py",
             "timeout": 30
           }
         ]
@@ -38,42 +38,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/post-tool-use/format-go.sh",
+            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/format-go-hook.py",
             "timeout": 30
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/post-tool-use/format-go.sh",
-            "timeout": 30
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/user-prompt-submit/log-prompts.sh",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/session-start/check-deps.sh",
-            "timeout": 15
           }
         ]
       }
@@ -84,7 +50,31 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/session-end/session-summary.sh",
+            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/stop-session-notify.py",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/stop-session-notify.py",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/notification-hook.py",
             "timeout": 10
           }
         ]
