@@ -24,11 +24,10 @@
 - Auto-formatting with gofmt and goimports
 
 ### 🤖 **Claude Code Integration**
-- **Complete hooks system** converted from Python to shell
+- **Simplified Python hooks** for clean maintainability
 - Real-time Go code formatting after edits
 - Quality enforcement (blocks bypass attempts)
-- Session tracking and reporting
-- Smart notifications with audio feedback
+- Session completion notifications with audio feedback
 - Development workflow automation
 
 ## Quick Setup
@@ -175,22 +174,11 @@ This template is optimized for Claude Code development:
 - **Dependency validation** - Ensures proper setup
 
 ### Hook Configuration:
-All hooks are enabled by default in `.claude/hooks.config.json`:
-```json
-{
-  "formatting": {
-    "auto_format": true,
-    "run_gofmt": true,
-    "run_goimports": true,
-    "run_go_vet": true
-  },
-  "quality": {
-    "block_skip_hooks": true,
-    "block_no_verify": true,
-    "protect_config_files": true
-  }
-}
-```
+Hook settings are configured in `.claude/settings.json` with simplified Python hooks:
+- **PreToolUse**: Blocks Git bypass attempts with `block-skip-hooks.py`
+- **PostToolUse**: Auto-formats Go files with `format-go-hook.py`
+- **Stop/Notification**: Provides audio feedback with completion notifications
+- **Audio Assets**: Success (`toasty.mp3`) and warning (`gutter-trash.mp3`) sounds
 
 ## Common Customizations
 
@@ -237,10 +225,10 @@ your-target:
 - Run `make deps` to download dependencies
 - Check that all tools are installed with `make setup`
 
-### Hook Issues
-- Ensure executable permissions: `chmod +x .claude/hooks/**/*.sh`
-- Check hook logs in `~/.claude/logs/`
-- Verify configuration in `.claude/hooks.config.json`
+### Hook Issues  
+- Check Python hook execution: `python3 .claude/hooks/format-go-hook.py`
+- Verify hook configuration in `.claude/settings.json`
+- Ensure audio files exist in `.claude/hooks/assets/`
 
 ## Support
 

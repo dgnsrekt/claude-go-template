@@ -171,17 +171,16 @@ myapp/
 │   └── workflows/
 │       └── ci.yml         # GitHub Actions CI/CD
 ├── .claude/               # Claude Code configuration
-│   ├── hooks/             # Comprehensive hook system
-│   │   ├── pre-tool-use/     # Quality enforcement hooks
-│   │   ├── post-tool-use/    # Auto-formatting hooks
-│   │   ├── user-prompt-submit/ # Session logging hooks
-│   │   ├── session-start/    # Dependency checking hooks
-│   │   ├── session-end/      # Session reporting hooks
-│   │   ├── notification/     # Smart notification hooks
-│   │   ├── stop              # Enhanced completion hook
+│   ├── hooks/             # Simplified Python hook system
 │   │   ├── assets/           # Audio files for notifications
-│   │   └── lib/              # Shared hook utilities
-│   └── hooks.config.json  # Hook configuration
+│   │   │   ├── toasty.mp3       # Success notification sound
+│   │   │   └── gutter-trash.mp3 # Warning notification sound
+│   │   ├── format-go-hook.py    # Auto-formats Go files after edits
+│   │   ├── block-skip-hooks.py  # Blocks quality bypass attempts
+│   │   ├── stop-session-notify.py # Session completion notifications
+│   │   ├── notification-hook.py # General notification handler
+│   │   └── strategic_notifications.py # Shared notification utilities
+│   └── settings.json       # Hook configuration
 ├── bin/                   # Built binaries (generated)
 ├── .golangci.yml          # Linting configuration
 ├── .pre-commit-config.yaml # Pre-commit hooks configuration
@@ -273,11 +272,11 @@ GitHub Actions workflow includes:
 This template is optimized for Claude Code development with a comprehensive hooks system:
 
 ### Claude Code Hooks System
-- **Pre-tool-use hooks**: Block quality bypass attempts and protect critical files
-- **Post-tool-use hooks**: Auto-format Go files with gofmt/goimports/go vet
-- **Session tracking**: Log all development activity with detailed analytics
-- **Smart notifications**: Audio feedback and optional remote notifications
-- **Quality enforcement**: Prevent `git commit --no-verify` and dangerous operations
+- **Quality enforcement**: Block Git bypass attempts (`--no-verify`, `SKIP=`)
+- **Auto-formatting**: Real-time Go code formatting with gofmt/goimports
+- **Audio notifications**: Success/warning sounds for development feedback
+- **Session tracking**: Completion notifications with project context
+- **Simplified Python hooks**: Clean, maintainable hook implementation
 
 ### Features
 - **Real-time formatting**: Go files automatically formatted after edits

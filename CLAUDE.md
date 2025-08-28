@@ -108,27 +108,17 @@ myapp/
 ├── .github/               # GitHub configuration
 │   └── workflows/         # CI/CD workflows
 │       └── ci.yml         # GitHub Actions CI/CD
-├── .claude/               # Claude Code configuration
-│   ├── hooks/             # Comprehensive hook system
-│   │   ├── pre-tool-use/     # Quality enforcement hooks
-│   │   │   └── protect-critical.sh # Blocks bypass attempts
-│   │   ├── post-tool-use/    # Auto-formatting hooks
-│   │   │   └── format-go.sh     # Formats Go files
-│   │   ├── user-prompt-submit/  # Session logging hooks
-│   │   │   └── log-prompts.sh   # Logs user interactions
-│   │   ├── session-start/    # Dependency checking hooks
-│   │   │   └── check-deps.sh    # Verifies environment
-│   │   ├── session-end/      # Session reporting hooks
-│   │   │   └── session-summary.sh # Generates reports
-│   │   ├── notification/     # Smart notification hooks
-│   │   │   └── notify.sh        # Handles notifications
-│   │   ├── stop              # Enhanced completion hook
+├── .claude/               # Claude Code configuration  
+│   ├── hooks/             # Simplified Python hook system
 │   │   ├── assets/           # Audio files for notifications
-│   │   │   ├── toasty.mp3       # Success sound
-│   │   │   └── gutter-trash.mp3 # Warning sound
-│   │   └── lib/              # Shared hook utilities
-│   │       └── common.sh        # Common functions
-│   └── hooks.config.json  # Hook configuration
+│   │   │   ├── toasty.mp3       # Success notification sound
+│   │   │   └── gutter-trash.mp3 # Warning notification sound
+│   │   ├── format-go-hook.py    # Auto-formats Go files after edits
+│   │   ├── block-skip-hooks.py  # Blocks quality bypass attempts  
+│   │   ├── stop-session-notify.py # Session completion notifications
+│   │   ├── notification-hook.py # General notification handler
+│   │   └── strategic_notifications.py # Shared notification utilities
+│   └── settings.json       # Hook configuration
 ├── bin/                   # Built binaries (generated)
 ├── .golangci.yml          # Comprehensive linter configuration
 ├── .pre-commit-config.yaml # Pre-commit hooks configuration
@@ -316,121 +306,93 @@ To customize this template for your project:
 
 ## Claude Code Hooks System
 
-This template includes a comprehensive Claude Code hooks system that provides automated workflow management:
+This template includes a simplified Python-based Claude Code hooks system:
 
 ### Hook Directory Structure
 ```
 .claude/
 ├── hooks/
-│   ├── pre-tool-use/          # Validation and blocking hooks
-│   │   └── protect-critical.sh   # Blocks quality bypass attempts
-│   ├── post-tool-use/         # Formatting and cleanup hooks
-│   │   └── format-go.sh          # Auto-formats Go files
-│   ├── user-prompt-submit/    # Logging and analysis hooks
-│   │   └── log-prompts.sh        # Logs user interactions
-│   ├── session-start/         # Session initialization
-│   │   └── check-deps.sh         # Dependency verification
-│   ├── session-end/           # Cleanup and reporting
-│   │   └── session-summary.sh   # Session reports
-│   ├── notification/          # Notification handling
-│   │   └── notify.sh            # Development notifications
-│   ├── stop                   # Enhanced stop hook
-│   ├── assets/               # Audio files and resources
-│   │   ├── toasty.mp3          # Success sound
-│   │   └── gutter-trash.mp3    # Warning/error sound
-│   └── lib/                  # Shared utilities
-│       └── common.sh           # Common functions
-└── hooks.config.json          # Hook configuration
+│   ├── assets/                    # Audio notification files
+│   │   ├── toasty.mp3                # Success notification sound
+│   │   └── gutter-trash.mp3          # Warning/error notification sound
+│   ├── format-go-hook.py          # Auto-formats Go files after edits
+│   ├── block-skip-hooks.py        # Blocks quality bypass attempts
+│   ├── stop-session-notify.py     # Session completion notifications
+│   ├── notification-hook.py       # General notification handler
+│   └── strategic_notifications.py # Shared notification utilities
+└── settings.json                  # Hook configuration
 ```
 
 ### Hook Features
 
-#### 🔒 **Quality Enforcement** (PreToolUse)
+#### 🔒 **Quality Enforcement** (block-skip-hooks.py)
 - **Blocks bypass attempts**: Prevents `git commit --no-verify`, `SKIP=` usage
-- **Protects config files**: Blocks modification of `.golangci.yml`, `Makefile`
-- **Dangerous command protection**: Blocks risky Git/Go operations
-- **Test reminders**: Suggests adding tests for new Go files
+- **Protects config files**: Blocks modification of `.golangci.yml` and quality configs
+- **Security notifications**: Sends alerts for bypass attempts with audio feedback
 
-#### 🎨 **Auto-Formatting** (PostToolUse)
-- **gofmt formatting**: Automatic Go code formatting
-- **Import organization**: `goimports` for clean imports
-- **Code validation**: `go vet` for correctness checks
-- **Compilation verification**: Ensures code compiles
-- **Optional test execution**: Runs tests after changes
+#### 🎨 **Auto-Formatting** (format-go-hook.py)
+- **gofmt formatting**: Automatic Go code formatting after edits
+- **Import organization**: `goimports` for clean import management
+- **Streamlined execution**: Clean, simple formatting workflow
 
-#### 📊 **Session Tracking**
-- **Prompt analysis**: Categorizes user activities (testing, debugging, etc.)
-- **Session logging**: Comprehensive audit trails
-- **Activity statistics**: JSON-based activity tracking
-- **Context validation**: Ensures proper project setup
+#### 🔔 **Completion Notifications** (stop-session-notify.py)
+- **Session tracking**: Notifies when development sessions complete
+- **Project context**: Includes current branch and project status
+- **Audio feedback**: Success sounds for completed sessions
+- **Remote notifications**: Optional ntfy server integration
 
-#### 🔍 **Dependency Checking** (SessionStart)
-- **Tool verification**: Checks Go, gofmt, goimports, golangci-lint
-- **Project structure**: Validates Go module, Makefile, configs
-- **Git status**: Reports uncommitted changes and branch state
-- **Environment setup**: Initializes session logging
+#### 📢 **General Notifications** (notification-hook.py)
+- **Smart routing**: Handles various Claude Code notification events
+- **Priority-based alerts**: Different notification levels and sounds
+- **Context-aware**: Includes project information in notifications
 
-#### 📈 **Session Reports** (SessionEnd)
-- **Activity summary**: Analyzes session transcript
-- **Quality checks**: Final build, test, and lint validation
-- **Markdown reports**: Detailed session documentation
-- **Statistics tracking**: Updates global activity counters
-
-#### 🔔 **Smart Notifications**
-- **Priority-based alerts**: High/default/low priority notifications
-- **Context-aware messaging**: Includes project and session info
-- **Audio feedback**: Success/warning sounds with multiple player support
-- **Optional ntfy integration**: Remote notifications (configurable)
+#### 🛠️ **Shared Utilities** (strategic_notifications.py)
+- **Audio playback**: Multi-platform audio support (mpg123, mpv, paplay, ffplay)
+- **Notification sending**: ntfy server integration for remote alerts
+- **Project detection**: Automatically detects Go projects and Git status
 
 ### Hook Configuration
 
-Configure hooks via `.claude/hooks.config.json`:
+Hooks are configured via `.claude/settings.json`:
 
 ```json
 {
-  "notifications": {
-    "enabled": false,
-    "sound_enabled": true,
-    "ntfy_server": "",
-    "ntfy_topic": "go-dev"
-  },
-  "formatting": {
-    "auto_format": true,
-    "run_gofmt": true,
-    "run_goimports": true,
-    "run_go_vet": true
-  },
-  "quality": {
-    "block_skip_hooks": true,
-    "block_no_verify": true,
-    "protect_config_files": true
-  },
-  "post_session": {
-    "run_tests": false,
-    "run_lint": false,
-    "check_build": false,
-    "cleanup_temp": true
-  },
-  "logging": {
-    "enabled": true,
-    "log_dir": "~/.claude/logs",
-    "session_logs": true
-  },
   "hooks": {
-    "stop-notify-active": true
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [{"type": "command", "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/block-skip-hooks.py"}]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit", 
+        "hooks": [{"type": "command", "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/format-go-hook.py"}]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [{"type": "command", "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/stop-session-notify.py"}]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "*", 
+        "hooks": [{"type": "command", "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/notification-hook.py"}]
+      }
+    ]
   }
 }
 ```
 
-### Hook Logs
+### Hook Output
 
-All hook activity is logged to `~/.claude/logs/`:
-- **hooks.log** - General hook activity
-- **session-{id}.log** - Individual session logs
-- **prompts-{id}.log** - User prompt history
-- **notifications.log** - Notification history
-- **session-stats.json** - Activity statistics
-- **session-report-{id}.md** - Detailed session reports
+Hooks provide real-time feedback via:
+- **Audio notifications**: Success (`toasty.mp3`) and warning (`gutter-trash.mp3`) sounds
+- **ntfy notifications**: Optional remote notifications to configured server
+- **Console logging**: Hook execution status and results
+- **Session notifications**: Project-aware completion notifications
 
 ### Audio Notifications
 
