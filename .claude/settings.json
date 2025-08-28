@@ -2,56 +2,22 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "*",
+        "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/block-skip-hooks.py",
-            "timeout": 10
+            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/block-skip-hooks.py"
           }
         ]
       }
     ],
     "PostToolUse": [
       {
-        "matcher": "Edit",
+        "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
             "type": "command",
-            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/format-go-hook.py",
-            "timeout": 30
-          }
-        ]
-      },
-      {
-        "matcher": "Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/format-go-hook.py",
-            "timeout": 30
-          }
-        ]
-      },
-      {
-        "matcher": "MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/format-go-hook.py",
-            "timeout": 30
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/stop-session-notify.py",
-            "timeout": 10
+            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/format-go-hook.py"
           }
         ]
       }
@@ -62,8 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/stop-session-notify.py",
-            "timeout": 10
+            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/stop-session-notify.py"
           }
         ]
       }
@@ -74,8 +39,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/notification-hook.py",
-            "timeout": 10
+            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/notification-hook.py"
           }
         ]
       }
@@ -83,12 +47,14 @@
   },
   "permissions": {
     "allow": [
-      "Read(//home/dgnsrekt/Development/claude-go-template/**)",
+      "Read(/home/dgnsrekt/Development/work/references/claude-go-template/**)",
       "Bash(golangci-lint help:*)",
-      "Bash(go env:*)"
+      "Bash(go env:*)",
+      "Bash(git add:*)",
+      "Bash(go mod init:*)"
     ],
     "additionalDirectories": [
-      "/home/dgnsrekt/Development/strategic-core"
+      "/home/dgnsrekt/Development/work/references/strategic-core"
     ]
   }
 }
