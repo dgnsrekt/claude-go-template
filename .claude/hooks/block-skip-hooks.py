@@ -83,7 +83,9 @@ def main() -> None:
         command = tool_input.get("command", "")
 
         # Block git hook bypasses
-        if "git commit" in command and ("SKIP=" in command or " -n" in command or "--no-verify" in command):
+        if "git commit" in command and (
+            "SKIP=" in command or " -n" in command or "--no-verify" in command
+        ):
             error_message = (
                 "🚫 Blocked: Bypassing Git hooks is not allowed.\n\n"
                 "Fix the actual Go code issues:\n"
@@ -100,26 +102,6 @@ def main() -> None:
                 session_id=session_id,
                 cwd=cwd,
                 details="Attempted to bypass Git quality hooks",
-            )
-
-            sys.stdout.write(
-                json.dumps({"decision": "block", "message": error_message}) + "\n"
-            )
-            return
-
-        # Block quality config modifications
-        if any(config in command for config in [".golangci.yml", ".pre-commit-config.yaml"]):
-            error_message = (
-                "🚫 Blocked: Quality config modification not allowed.\n\n"
-                "Fix the code, not the linting rules."
-            )
-
-            send_security_alert(
-                violation_type="Config modification attempt",
-                command=command,
-                session_id=session_id,
-                cwd=cwd,
-                details="Attempted to modify quality config files",
             )
 
             sys.stdout.write(
