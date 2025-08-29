@@ -59,23 +59,38 @@ make check
 ### Using as a Template
 
 1. **Create your project from this template**
-2. **Update module information:**
+2. **Set up your project using Claude Code:**
+   ```
+   /setup_template <your-github-username> <your-project-name> [optional-description]
+   ```
+   
+   **Examples:**
+   ```
+   /setup_template johndoe myapp
+   /setup_template johndoe myapp "A powerful Go application"
+   ```
+
+   The setup command will:
+   - Update all placeholders with your project information
+   - Configure Go module path and build settings
+   - Rename directories and update import paths
+   - Customize Claude Code hooks with your project name
+   - Clean up template-specific files
+   - Initialize a fresh git repository
+
+3. **Manual setup (alternative):**
+   If you prefer manual setup:
    ```bash
    # Replace module name in go.mod
    go mod edit -module github.com/yourusername/yourproject
 
    # Update import paths throughout the codebase
-   find . -name "*.go" -type f -exec sed -i 's|github.com/myuser/myapp|github.com/yourusername/yourproject|g' {} \;
-   ```
-
-3. **Customize project:**
-   - Update `BINARY_NAME` in `Makefile`
-   - Modify `.golangci.yml` for project-specific linting rules
-   - Update this `README.md` with your project information
-   - Customize `CLAUDE.md` for your development workflow
-
-4. **Initialize your repository:**
-   ```bash
+   find . -name "*.go" -type f -exec sed -i 's|github.com/YOUR_USERNAME/PROJECT_NAME|github.com/yourusername/yourproject|g' {} \;
+   
+   # Update binary name in Makefile
+   sed -i 's|BINARY_NAME=PROJECT_NAME|BINARY_NAME=yourproject|g' Makefile
+   
+   # Initialize git repository
    git add .
    git commit -m "feat: initial project setup from template"
    ```
@@ -152,9 +167,9 @@ make run-hooks
 ## Project Structure
 
 ```
-myapp/
+PROJECT_NAME/
 ├── cmd/
-│   └── myapp/              # Main application entry point
+│   └── PROJECT_NAME/              # Main application entry point
 │       └── main.go         # Application main function
 ├── internal/               # Private application code
 │   └── core/              # Core application logic
@@ -179,7 +194,7 @@ myapp/
 │   │   ├── block-skip-hooks.py  # Blocks quality bypass attempts
 │   │   ├── stop-session-notify.py # Session completion notifications
 │   │   ├── notification-hook.py # General notification handler
-│   │   └── strategic_notifications.py # Shared notification utilities
+│   │   └── notifications.py # Shared notification utilities
 │   └── settings.json       # Hook configuration
 ├── bin/                   # Built binaries (generated)
 ├── .golangci.yml          # Linting configuration

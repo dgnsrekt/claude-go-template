@@ -11,10 +11,10 @@ import sys
 from typing import List, Tuple
 
 # Import shared notification utilities
-from strategic_notifications import (
+from notifications import (
     log,
     get_project_context,
-    send_strategic_notification,
+    send_notification,
     play_audio,
 )
 
@@ -39,28 +39,28 @@ def analyze_message_content(
     # High priority situations
     if "permission" in message_lower or "approval" in message_lower:
         priority = "high"
-        tags = ["warning", "key", "strategic-task-commander"]
-        title = "Strategic Task Commander: Permission Required"
+        tags = ["warning", "key", "PROJECT_NAME_SLUG"]
+        title = "PROJECT_NAME_FULL: Permission Required"
     elif "error" in message_lower or "failed" in message_lower:
         priority = "high"
-        tags = ["red_circle", "warning", "strategic-task-commander"]
-        title = "Strategic Task Commander: Error Detected"
+        tags = ["red_circle", "warning", "PROJECT_NAME_SLUG"]
+        title = "PROJECT_NAME_FULL: Error Detected"
     elif "waiting" in message_lower or "idle" in message_lower:
         priority = "low"
-        tags = ["clock", "zzz", "strategic-task-commander"]
-        title = "Strategic Task Commander: Waiting for Input"
+        tags = ["clock", "zzz", "PROJECT_NAME_SLUG"]
+        title = "PROJECT_NAME_FULL: Waiting for Input"
     elif "blocked" in message_lower or "hook" in message_lower:
         priority = "default"
-        tags = ["stop_sign", "warning", "strategic-task-commander"]
-        title = "Strategic Task Commander: Hook Alert"
+        tags = ["stop_sign", "warning", "PROJECT_NAME_SLUG"]
+        title = "PROJECT_NAME_FULL: Hook Alert"
     elif "completed" in message_lower or "finished" in message_lower:
         priority = "default"
-        tags = ["white_check_mark", "gear", "strategic-task-commander"]
-        title = "Strategic Task Commander: Task Completed"
+        tags = ["white_check_mark", "gear", "PROJECT_NAME_SLUG"]
+        title = "PROJECT_NAME_FULL: Task Completed"
     else:
         priority = "default"
-        tags = ["bell", "info", "strategic-task-commander"]
-        title = "Strategic Task Commander: Notification"
+        tags = ["bell", "info", "PROJECT_NAME_SLUG"]
+        title = "PROJECT_NAME_FULL: Notification"
 
     return priority, title, tags
 
@@ -116,7 +116,7 @@ def main() -> None:
         )
 
         # Send notification using shared function
-        success = send_strategic_notification(
+        success = send_notification(
             message=formatted_message,
             title=title,
             priority=priority,

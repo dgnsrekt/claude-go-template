@@ -16,7 +16,7 @@ const (
 
 func main() {
 	if len(os.Args) > 1 && os.Args[1] == versionFlag {
-		fmt.Printf("myapp version %s\n", version) //nolint:forbidigo // Acceptable: version output to stdout
+		fmt.Printf("PROJECT_NAME version %s\n", version) //nolint:forbidigo // Acceptable: version output to stdout
 		return
 	}
 

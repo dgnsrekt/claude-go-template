@@ -11,10 +11,10 @@ import json
 import sys
 
 # Import shared notification utilities
-from strategic_notifications import (
+from notifications import (
     log,
     get_project_context,
-    send_strategic_notification,
+    send_notification,
     play_audio,
 )
 
@@ -46,11 +46,11 @@ def send_security_alert(
 This attempt was BLOCKED to maintain code quality standards.
 All hook bypass attempts are logged and monitored."""
 
-        success = send_strategic_notification(
+        success = send_notification(
             message=message,
-            title="🚨 Strategic Task Commander: Security Alert",
+            title="🚨 PROJECT_NAME_FULL: Security Alert",
             priority="high",
-            tags=["rotating_light", "warning", "security", "strategic-task-commander"],
+            tags=["rotating_light", "warning", "security", "PROJECT_NAME_SLUG"],
             topic_type="alerts",
             project_info=project_info,
             session_id=session_id,
@@ -93,7 +93,7 @@ def main() -> None:
                 "• Run: goimports -w .\n"
                 "• Fix golangci-lint warnings\n"
                 "• Address go vet issues\n\n"
-                "Quality checks ensure Strategic Task Commander excellence."
+                "Quality checks ensure PROJECT_NAME_FULL excellence."
             )
 
             send_security_alert(

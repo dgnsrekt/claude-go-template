@@ -10,7 +10,7 @@ import (
 func TestNewApp(t *testing.T) {
 	app := NewApp()
 	require.NotNil(t, app)
-	assert.Equal(t, "myapp", app.GetName())
+	assert.Equal(t, "PROJECT_NAME", app.GetName())
 }
 
 func TestApp_Run(t *testing.T) {
@@ -41,5 +41,5 @@ func TestApp_Run(t *testing.T) {
 func TestApp_GetName(t *testing.T) {
 	app := NewApp()
 	name := app.GetName()
-	assert.Equal(t, "myapp", name)
+	assert.Equal(t, "PROJECT_NAME", name)
 }

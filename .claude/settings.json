@@ -62,8 +62,6 @@
       "Bash(git add:*)",
       "Bash(go mod init:*)"
     ],
-    "additionalDirectories": [
-      "/home/dgnsrekt/Development/work/references/strategic-core"
-    ]
+    "additionalDirectories": []
   }
 }

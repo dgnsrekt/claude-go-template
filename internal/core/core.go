@@ -10,7 +10,7 @@ type App struct {
 // NewApp creates a new application instance.
 func NewApp() *App {
 	return &App{
-		name: "myapp",
+		name: "PROJECT_NAME",
 	}
 }
 

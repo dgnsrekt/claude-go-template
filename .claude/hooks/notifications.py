@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """
-Strategic Task Commander notification utilities for Claude Code hooks.
+PROJECT_NAME_FULL notification utilities for Claude Code hooks.
 
 Shared functions for sending ntfy notifications and getting project context
-across all Strategic Task Commander Claude hooks.
+across all PROJECT_NAME_FULL Claude hooks.
 """
 
 import os
@@ -14,12 +14,12 @@ from pathlib import Path
 from typing import Optional, List
 
 
-def log(message: str, hook_name: str = "strategic-notifications") -> None:
+def log(message: str, hook_name: str = "notifications") -> None:
     """Print a message to stderr to avoid interfering with hook output."""
     print(f"[{hook_name}] {message}", file=sys.stderr)
 
 
-def play_audio(audio_file: str, hook_name: str = "strategic-notifications") -> bool:
+def play_audio(audio_file: str, hook_name: str = "notifications") -> bool:
     """
     Play an audio file using system audio player.
 
@@ -89,7 +89,7 @@ def send_ntfy_notification(
     title: Optional[str] = None,
     priority: str = "default",
     tags: Optional[List[str]] = None,
-    hook_name: str = "strategic-notifications",
+    hook_name: str = "notifications",
 ) -> bool:
     """
     Send notification to ntfy server.
@@ -143,9 +143,9 @@ def send_ntfy_notification(
         return False
 
 
-def get_project_context(cwd: str, hook_name: str = "strategic-notifications") -> dict:
+def get_project_context(cwd: str, hook_name: str = "notifications") -> dict:
     """
-    Get context about the Strategic Task Commander Go project.
+    Get context about the PROJECT_NAME_FULL Go project.
 
     Args:
         cwd: Current working directory path
@@ -212,24 +212,24 @@ def get_project_context(cwd: str, hook_name: str = "strategic-notifications") ->
         }
 
 
-def get_strategic_task_commander_config() -> dict:
+def get_project_config() -> dict:
     """
-    Get Strategic Task Commander specific configuration.
+    Get PROJECT_NAME_FULL specific configuration.
 
     Returns:
         Dictionary with ntfy server settings and topics
     """
     return {
         "ntfy_server": "http://nas1-oryx:2586",
-        "dev_topic": "strategic-task-commander-dev",
-        "notification_topic": "strategic-task-commander-notifications",
-        "alert_topic": "strategic-task-commander-alerts",
+        "dev_topic": "PROJECT_NAME_SLUG-dev",
+        "notification_topic": "PROJECT_NAME_SLUG-notifications",
+        "alert_topic": "PROJECT_NAME_SLUG-alerts",
     }
 
 
 def format_message_header(project_info: dict, session_id: str) -> str:
     """
-    Format a standard message header for Strategic Task Commander notifications.
+    Format a standard message header for PROJECT_NAME_FULL notifications.
 
     Args:
         project_info: Project context from get_project_context()
@@ -247,7 +247,7 @@ Path: {os.path.basename(project_info["path"])}
 Time: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}"""
 
 
-def send_strategic_notification(
+def send_notification(
     message: str,
     title: str,
     priority: str = "default",
@@ -255,10 +255,10 @@ def send_strategic_notification(
     topic_type: str = "dev",
     project_info: Optional[dict] = None,
     session_id: str = "unknown",
-    hook_name: str = "strategic-notifications",
+    hook_name: str = "notifications",
 ) -> bool:
     """
-    Send a Strategic Task Commander notification with standard formatting.
+    Send a PROJECT_NAME_FULL notification with standard formatting.
 
     Args:
         message: The main notification message
@@ -273,7 +273,7 @@ def send_strategic_notification(
     Returns:
         True if notification was sent successfully, False otherwise
     """
-    config = get_strategic_task_commander_config()
+    config = get_project_config()
 
     # Select topic based on type
     topic_map = {
@@ -283,20 +283,20 @@ def send_strategic_notification(
     }
     topic = topic_map.get(topic_type, config["dev_topic"])
 
-    # Add strategic-task-commander tag if not present
+    # Add PROJECT_NAME_SLUG tag if not present
     if tags is None:
-        tags = ["strategic-task-commander"]
-    elif "strategic-task-commander" not in tags:
-        tags.append("strategic-task-commander")
+        tags = ["PROJECT_NAME_SLUG"]
+    elif "PROJECT_NAME_SLUG" not in tags:
+        tags.append("PROJECT_NAME_SLUG")
 
     # Format message with header if project info is provided
     if project_info:
         header = format_message_header(project_info, session_id)
         formatted_message = (
-            f"Strategic Task Commander Development\n\n{header}\n\n**Message**: {message}"
+            f"PROJECT_NAME_FULL Development\n\n{header}\n\n**Message**: {message}"
         )
     else:
-        formatted_message = f"Strategic Task Commander: {message}"
+        formatted_message = f"PROJECT_NAME_FULL: {message}"
 
     return send_ntfy_notification(
         server_url=config["ntfy_server"],

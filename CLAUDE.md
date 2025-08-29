@@ -88,9 +88,9 @@ make help
 ## Project Structure
 
 ```
-myapp/
+PROJECT_NAME/
 ├── cmd/
-│   └── myapp/              # Main application entry point
+│   └── PROJECT_NAME/              # Main application entry point
 │       └── main.go         # Application main function
 ├── internal/               # Private application code
 │   └── core/              # Core application logic
@@ -117,7 +117,7 @@ myapp/
 │   │   ├── block-skip-hooks.py  # Blocks quality bypass attempts  
 │   │   ├── stop-session-notify.py # Session completion notifications
 │   │   ├── notification-hook.py # General notification handler
-│   │   └── strategic_notifications.py # Shared notification utilities
+│   │   └── notifications.py # Shared notification utilities
 │   └── settings.json       # Hook configuration
 ├── bin/                   # Built binaries (generated)
 ├── .golangci.yml          # Comprehensive linter configuration
@@ -265,16 +265,16 @@ func TestFileOperation(t *testing.T) {
 
 To customize this template for your project:
 
-1. **Update module name**: Change `github.com/myuser/myapp` in `go.mod`
+1. **Update module name**: Change `github.com/YOUR_USERNAME/PROJECT_NAME` in `go.mod`
 2. **Rename binary**: Update `BINARY_NAME` in `Makefile`
 3. **Update imports**: Replace import paths throughout the codebase
 4. **Customize linting**: Modify `.golangci.yml` for project-specific rules
 5. **Update documentation**: Modify this `CLAUDE.md` file
 
 ### Search and Replace Patterns
-- `myapp` → `{your-app-name}`
-- `github.com/myuser/myapp` → `{your-module-path}`
-- `myuser` → `{your-username}`
+- `PROJECT_NAME` → `{your-app-name}`
+- `github.com/YOUR_USERNAME/PROJECT_NAME` → `{your-module-path}`
+- `YOUR_USERNAME` → `{your-username}`
 
 ## Common Issues & Troubleshooting
 
@@ -319,7 +319,7 @@ This template includes a simplified Python-based Claude Code hooks system:
 │   ├── block-skip-hooks.py        # Blocks quality bypass attempts
 │   ├── stop-session-notify.py     # Session completion notifications
 │   ├── notification-hook.py       # General notification handler
-│   └── strategic_notifications.py # Shared notification utilities
+│   └── notifications.py # Shared notification utilities
 └── settings.json                  # Hook configuration
 ```
 
@@ -346,7 +346,7 @@ This template includes a simplified Python-based Claude Code hooks system:
 - **Priority-based alerts**: Different notification levels and sounds
 - **Context-aware**: Includes project information in notifications
 
-#### 🛠️ **Shared Utilities** (strategic_notifications.py)
+#### 🛠️ **Shared Utilities** (notifications.py)
 - **Audio playback**: Multi-platform audio support (mpg123, mpv, paplay, ffplay)
 - **Notification sending**: ntfy server integration for remote alerts
 - **Project detection**: Automatically detects Go projects and Git status

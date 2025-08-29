@@ -10,10 +10,10 @@ import json
 import sys
 
 # Import shared notification utilities
-from strategic_notifications import (
+from notifications import (
     log,
     get_project_context,
-    send_strategic_notification,
+    send_notification,
     play_audio,
 )
 
@@ -48,7 +48,7 @@ def send_security_alert(
 This attempt was BLOCKED to maintain code quality standards.
 Fix the code, not the linting rules."""
 
-        success = send_strategic_notification(
+        success = send_notification(
             message=message,
             title="🚨 Claude Go Template: Config Protection",
             priority="high",

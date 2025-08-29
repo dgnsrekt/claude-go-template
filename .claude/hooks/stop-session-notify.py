@@ -12,10 +12,10 @@ import sys
 from datetime import datetime
 
 # Import shared notification utilities
-from strategic_notifications import (
+from notifications import (
     log,
     get_project_context,
-    send_strategic_notification,
+    send_notification,
     play_audio,
 )
 
@@ -73,20 +73,20 @@ def determine_notification_characteristics(session_info: dict) -> tuple[str, str
 
     if session_info["success"] and activity_type in ["git commit", "testing"]:
         priority = "high"
-        tags = ["white_check_mark", "rocket", "strategic-task-commander"]
-        title = f"Strategic Task Commander: {activity_type.title()} Session Complete"
+        tags = ["white_check_mark", "rocket", "PROJECT_NAME_SLUG"]
+        title = f"PROJECT_NAME_FULL: {activity_type.title()} Session Complete"
     elif activity_type in ["research", "documentation"]:
         priority = "default"
-        tags = ["book", "lightbulb", "strategic-task-commander"]
-        title = f"Strategic Task Commander: {activity_type.title()} Session"
+        tags = ["book", "lightbulb", "PROJECT_NAME_SLUG"]
+        title = f"PROJECT_NAME_FULL: {activity_type.title()} Session"
     elif activity_type in ["refactoring", "debugging"]:
         priority = "default"
-        tags = ["wrench", "gear", "strategic-task-commander"]
-        title = f"Strategic Task Commander: {activity_type.title()} Session"
+        tags = ["wrench", "gear", "PROJECT_NAME_SLUG"]
+        title = f"PROJECT_NAME_FULL: {activity_type.title()} Session"
     else:
         priority = "default"
-        tags = ["gear", "construction", "strategic-task-commander"]
-        title = "Strategic Task Commander: Development Session Complete"
+        tags = ["gear", "construction", "PROJECT_NAME_SLUG"]
+        title = "PROJECT_NAME_FULL: Development Session Complete"
 
     return priority, title, tags
 
@@ -114,7 +114,7 @@ def main() -> None:
         message = f"{session_info['details']} at {datetime.now().strftime('%H:%M')}"
 
         # Send notification using shared function
-        success = send_strategic_notification(
+        success = send_notification(
             message=message,
             title=title,
             priority=priority,

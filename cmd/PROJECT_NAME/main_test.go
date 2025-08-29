@@ -14,7 +14,7 @@ func TestMainVersionFlag(t *testing.T) {
 	defer func() { os.Args = originalArgs }()
 
 	// Test version flag
-	os.Args = []string{"myapp", versionFlag}
+	os.Args = []string{"PROJECT_NAME", versionFlag}
 
 	// Since main() calls os.Exit or returns, we test the logic indirectly
 	// by checking the args length condition
@@ -27,7 +27,7 @@ func TestMainWithoutArgs(t *testing.T) {
 	defer func() { os.Args = originalArgs }()
 
 	// Test without version flag
-	os.Args = []string{"myapp"}
+	os.Args = []string{"PROJECT_NAME"}
 
 	// Check that we don't have the version flag
 	hasVersionFlag := len(os.Args) > 1 && os.Args[1] == versionFlag
