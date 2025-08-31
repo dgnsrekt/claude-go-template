@@ -42,6 +42,17 @@
         ]
       }
     ],
+    "PreCompact": [
+      {
+        "matcher": "auto",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/precompact-notify.py"
+          }
+        ]
+      }
+    ],
     "Notification": [
       {
         "matcher": "*",

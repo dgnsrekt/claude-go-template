@@ -61,8 +61,8 @@ Fix the code, not the linting rules."""
 
         if success:
             log("Config protection alert notification sent", HOOK_NAME)
-            # Play gutter-trash audio for security violations
-            play_audio("gutter-trash.mp3", HOOK_NAME)
+            # Play that-was-pathetic audio for security violations
+            play_audio("that-was-pathetic.mp3", HOOK_NAME)
         else:
             log("Failed to send config protection alert notification", HOOK_NAME)
 
